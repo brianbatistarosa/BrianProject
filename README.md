@@ -35,3 +35,7 @@ Conclusão:
 
 O estado com o maior número de cervejarias e de maior porte é o Colorado, seguido por Oregon e Califórnia, que possuem unidades de grande e pequeno porte. A Carolina do Norte e Ohio possuem duas unidades cada. Apenas dois estados registraram fechamento de unidades: Califórnia e Washington.
 
+
+Observação:
+
+Para a extração e análise da base, é necessário executar o código "CaseInBev_Brewery" (Run All).
