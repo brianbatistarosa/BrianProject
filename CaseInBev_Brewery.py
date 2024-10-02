@@ -29,7 +29,7 @@ breweries_data = response.json()
 breweries_data_str = json.dumps(breweries_data)
 
 directory_bronze = bronze_path
-file_path_bronze = os.path.join(directory_bronze, 'breweries_raw.json')
+file_path_bronze = os.path.join(directory_bronze, 'breweries.json')
 dbutils.fs.put(file_path_bronze, breweries_data_str, overwrite=True)
 # display(dbutils.fs.ls(file_path_bronze))
 
@@ -44,6 +44,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, DecimalType
 from pyspark.sql.functions import current_timestamp, col, hash, concat_ws, when, count
 import logging
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 directory_silver = silver_path
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -126,8 +128,9 @@ fig.show()
 
 aggregate_df = df_clean.groupBy("state", "brewery_type").count()
 aggregate_df = aggregate_df.orderBy("state", "brewery_type")
+aggregate_df.show(n=aggregate_df.count(), truncate=False)
 aggregate_df.write.mode("overwrite").parquet(directory_gold)
 
 df_gold = spark.read.parquet(directory_gold)
-df_gold.show()
+df_gold.show(n=df_gold.count(), truncate=False)
 df_gold.select([count(when(col(c).isNull(), c)).alias(c) for c in df_gold.columns]).show()
